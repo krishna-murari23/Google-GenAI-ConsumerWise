@@ -1,0 +1,256 @@
+{% extends 'base.html' %} {% block content %}
+<div
+  class="bg-image vh-100 mb-7"
+  style="
+    margin-top: -50px;
+    background-image: url('static/images/3.jpg');
+    background-size: cover;
+    background-position: center; /* Center the background image */
+    min-height: 100vh; /* Ensure the section takes full height */
+  "
+>
+  <div class="mask" style="background-color: hsla(0, 0%, 0%, 0.4)">
+    <div
+      class="container d-flex justify-content-center align-items-center h-100"
+    >
+      <div class="text-white text-center">
+        <h1 class="mb-3">
+          <strong
+            >Welcome to <span style="color: #3a833a">ConsumerWise</span></strong
+          >
+        </h1>
+        <h5 class="mb-3">Your go-to app for a healthier lifestyle</h5>
+        <img
+          src="static/images/logo.jpg"
+          class="d-block mx-auto mb-4 rounded-circle"
+          style="width: 150px"
+          alt="Track Your Nutrition"
+        />
+
+        <h5>
+          Whether you're looking to eat healthier, lose weight, or simply learn
+          more about the food you consume, ConsumerWise is here to support you
+          every step of the way.
+        </h5>
+        <a
+          class="btn btn-success btn-lg mt-4"
+          href="{{ url_for('analyze') }}"
+          role="button"
+          data-mdb-ripple-init
+          ><strong>Get Started</strong></a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="my-5 py-5 bg-light text-center">
+  <div class="container">
+    <h2 class="mb-5">How it works</h2>
+    <div class="row justify-content-center align-items-center">
+      <!-- Step 1 -->
+      <div class="col-lg-3 mb-4">
+        <div
+          class="step-box p-4 bg-white rounded shadow h-100 d-flex flex-column justify-content-between"
+        >
+          <div>
+            <div class="step-icon mb-3">
+              <i class="fas fa-solid fa-share fa-3x text-success"></i>
+            </div>
+            <h4 class="step-title mb-3">1. Open the Scanner</h4>
+            <p>
+              Head over to the <strong>Analyse</strong> tab to open the scanner
+              and get started.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Arrow -->
+      <div class="col-lg-1 d-none d-lg-block">
+        <i class="fas fa-arrow-right fa-2x text-success"></i>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="col-lg-3 mb-4">
+        <div
+          class="step-box p-4 bg-white rounded shadow h-100 d-flex flex-column justify-content-between"
+        >
+          <div>
+            <div class="step-icon mb-3">
+              <i class="fas fa-camera fa-3x text-success"></i>
+            </div>
+            <h4 class="step-title mb-3">2. Capture the Label</h4>
+            <p>
+              Click a photo of the product’s nutrition label and submit it to
+              us.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Arrow -->
+      <div class="col-lg-1 d-none d-lg-block">
+        <i class="fas fa-arrow-right fa-2x text-success"></i>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="col-lg-3 mb-4">
+        <div
+          class="step-box p-4 bg-white rounded shadow h-100 d-flex flex-column justify-content-between"
+        >
+          <div>
+            <div class="step-icon mb-3">
+              <i class="fas fa-check fa-3x text-success"></i>
+            </div>
+            <h4 class="step-title mb-3">3. We take care of the rest</h4>
+            <p>
+              Receive instant insights from our chatbot and learn more about the
+              food you consume.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="my-5 bg-success text-white text-center p-5">
+  <h2 class="mb-4">It is as easy as it can get!</h2>
+  <p>
+    Whether you're looking to eat healthier, lose weight, or simply learn more
+    about the food you consume, NutriGuide is here to support you every step of
+    the way.
+  </p>
+</section>
+
+<style>
+  .carousel-item-height {
+    height: 300px; /* Set your desired fixed height for the carousel item */
+  }
+
+  .testimonial-image {
+    width: 250px; /* Adjust the width to your preference */
+    height: 300px; /* Set a fixed height for the image */
+    border-radius: 15px; /* Rounded corners */
+    object-fit: cover; /* Ensure the image covers the area nicely */
+  }
+</style>
+
+<section class="my-5 py-5 bg-light text-center">
+  <div class="container">
+    <h2 class="mb-5">What Our Users Say</h2>
+
+    <div
+      id="testimonialCarousel"
+      class="carousel slide"
+      data-bs-ride="carousel"
+    >
+      <div class="carousel-inner">
+        <!-- Testimonial 1 -->
+        <div class="carousel-item active carousel-item-height">
+          <div class="row align-items-center h-100">
+            <div class="col-lg-6 col-sm-12">
+              <p class="text-muted">
+                "ConsumerWise has transformed the way I view nutrition labels.
+                I’ve become more conscious of my food choices, and the insights
+                are incredibly helpful!"
+              </p>
+              <h5 class="font-weight-bold">- Sarah J.</h5>
+            </div>
+            <div class="col-lg-6 col-sm-12">
+              <img
+                src="{{ url_for('static', filename='images/user_girl.jpeg') }}"
+                class="testimonial-image mb-3 img-fluid"
+                alt="User 1"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 2 -->
+        <div class="carousel-item carousel-item-height">
+          <div class="row align-items-center h-100">
+            <div class="col-lg-6 col-sm-12">
+              <p class="text-muted">
+                "This app makes it so easy to track what I eat. The chatbot is
+                friendly and informative. Highly recommend!"
+              </p>
+              <h5 class="font-weight-bold">- James T.</h5>
+            </div>
+            <div class="col-lg-6 col-sm-12">
+              <img
+                src="{{ url_for('static', filename='images/user_male.jpg') }}"
+                class="testimonial-image mb-3 img-fluid"
+                alt="User 2"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 3 -->
+        <div class="carousel-item carousel-item-height">
+          <div class="row align-items-center h-100">
+            <div class="col-lg-6 col-sm-12">
+              <p class="text-muted">
+                "I've lost weight and improved my eating habits thanks to
+                ConsumerWise. It’s a game changer for anyone wanting to live
+                healthier."
+              </p>
+              <h5 class="font-weight-bold">- Priya S.</h5>
+            </div>
+            <div class="col-lg-6 col-sm-12">
+              <img
+                src="{{ url_for('static', filename='images/user_girl.jpeg') }}"
+                class="testimonial-image mb-3 img-fluid"
+                alt="User 3"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 4 -->
+        <div class="carousel-item carousel-item-height">
+          <div class="row align-items-center h-100">
+            <div class="col-lg-6 col-sm-12">
+              <p class="text-muted">
+                "The user interface is fantastic! It’s simple to use and the
+                results are instantly rewarding."
+              </p>
+              <h5 class="font-weight-bold">- Mark L.</h5>
+            </div>
+            <div class="col-lg-6 col-sm-12">
+              <img
+                src="{{ url_for('static', filename='images/user_male.jpg') }}"
+                class="testimonial-image mb-3 img-fluid"
+                alt="User 4"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Carousel Controls -->
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#testimonialCarousel"
+        data-bs-slide="prev"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#testimonialCarousel"
+        data-bs-slide="next"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

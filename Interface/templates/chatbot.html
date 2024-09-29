@@ -1,0 +1,166 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container-fluid h-100">
+  <div class="row justify-content-center align-items-center h-100">
+    <div class="col-md-10 col-xl-8">
+      <div
+        class="chat-container w-100 h-100 border border-light rounded shadow-sm"
+      >
+        <div
+          class="chat-header d-flex flex-column align-items-center p-3"
+          style="background-color: #f7f7f7"
+        >
+          <div>
+            <img
+              src="static/images/chatbot_avatar.png"
+              class="rounded-circle"
+              alt="Chatbot Avatar"
+              style="width: 70px; height: 70px"
+            />
+          </div>
+
+          <div class="user_info text-center mt-3">
+            <span
+              class="font-weight-bold"
+              style="color: black; font-size: 1.2rem"
+            >
+              Hey, there! I am
+              <span
+                class="font-weight-bold"
+                style="color: #0a7513; font-size: 1.2rem"
+                >Nutribot.</span
+              >
+            </span>
+            <h6 class="mb-0" style="color: black">Ask me anything!</h6>
+          </div>
+        </div>
+
+        <!-- Chat Body -->
+        <div
+          id="messageFormeight"
+          class="chat-body p-3"
+          style="height: 60vh; overflow-y: auto; border-top: 1px solid #ddd"
+        >
+          {% if first_message %}
+          <!-- Display first message as a bot response -->
+          <div class="d-flex justify-content-start mb-4">
+            <div class="img_cont_msg">
+              <img
+                src="static/images/chatbot_avatar.png"
+                class="rounded-circle user_img_msg"
+                alt="Bot Avatar"
+                style="width: 40px; height: 40px"
+              />
+            </div>
+            <div
+              class="msg_cotainer"
+              style="max-width: 75%; word-wrap: break-word; white-space: normal"
+            >
+              {{ first_message }}
+            </div>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Chat Footer with Input -->
+        <div class="chat-footer p-3" style="background-color: #f7f7f7">
+          <form id="messageArea" class="input-group">
+            <input
+              type="text"
+              id="text"
+              name="msg"
+              placeholder="Type your message..."
+              autocomplete="off"
+              class="form-control"
+              required
+            />
+            <div class="input-group-append">
+              <button type="submit" id="send" class="btn btn-primary">
+                <i class="fas fa-location-arrow"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+  <script>
+    function scrollToBottom() {
+      var messageBody = document.getElementById("messageFormeight");
+      messageBody.scrollTop = messageBody.scrollHeight;
+    }
+
+    $(document).ready(function () {
+      $("#messageArea").on("submit", function (event) {
+        event.preventDefault();
+
+        var rawText = $("#text").val();
+
+        if (!rawText.trim()) return;
+
+        var userHtml = `
+          <div class="d-flex justify-content-end mb-4">
+            <div class="msg_cotainer_send" style="max-width: 75%; border-radius: 200px; word-wrap: break-word; white-space: normal;">
+              ${rawText}
+            </div>
+            <div class="img_cont_msg">
+              <img src="static/images/user.png" class="rounded-circle user_img_msg" alt="User Avatar" style="width: 40px; height: 40px;">
+            </div>
+          </div>`;
+
+        $("#text").val("");
+        $("#messageFormeight").append(userHtml);
+        scrollToBottom();
+
+        var typingIndicator = `
+          <div class="d-flex justify-content-start mb-4 bot-typing">
+            <div class="img_cont_msg">
+              <img src="static/images/chatbot_avatar.png" class="rounded-circle user_img_msg" alt="Bot Avatar" style="width: 40px; height: 40px;">
+            </div>
+            <div class="msg_cotainer" style="max-width: 75%; word-wrap: break-word; white-space: normal;">
+              <span class="typing">Typing...</span>
+            </div>
+          </div>`;
+
+        $("#messageFormeight").append(typingIndicator);
+        scrollToBottom();
+
+        $.ajax({
+          data: { msg: rawText },
+          type: "POST",
+          url: "/get",
+          success: function (data) {
+            $(".bot-typing").remove();
+            var botHtml = `
+              <div class="d-flex justify-content-start mb-4">
+                <div class="img_cont_msg">
+                  <img src="static/images/chatbot_avatar.png" class="rounded-circle user_img_msg" alt="Bot Avatar" style="width: 40px; height: 40px;">
+                </div>
+                <div class="msg_cotainer" style="max-width: 75%; word-wrap: break-word; white-space: normal;">
+                  ${data.response}
+                </div>
+              </div>`;
+            $("#messageFormeight").append(botHtml);
+            scrollToBottom();
+          },
+          error: function () {
+            $(".bot-typing").remove();
+            var errorHtml = `
+              <div class="d-flex justify-content-start mb-4">
+                <div class="msg_cotainer_error">
+                  Sorry, there was an error. Please try again later.
+                </div>
+              </div>`;
+            $("#messageFormeight").append(errorHtml);
+            scrollToBottom();
+          },
+        });
+      });
+    });
+  </script>
+  {% endblock %}
+</div>

@@ -1,0 +1,28 @@
+{% extends "base.html" %} {% block content %}
+<div class="container">
+  <h2 class="mt-4 text-center">User Preferences Questionnaire</h2>
+  <p class="text-center mb-5">
+    Please spare a few minutes to answer some questions. This will help us know
+    you better.
+  </p>
+  <div class="card mt-3 mb-5">
+    <div class="card-body">
+      <h6 class="card-title mb-3 text-center">{{ question }}</h6>
+      <form method="post">
+        <div class="form-group">
+          <input
+            type="text"
+            name="answer"
+            class="form-control"
+            required
+            placeholder="Your answer"
+          />
+        </div>
+        <div class="d-flex justify-content-center">
+          <button type="submit" class="btn btn-success mt-3">Next</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

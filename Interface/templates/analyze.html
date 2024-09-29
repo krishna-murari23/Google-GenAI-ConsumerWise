@@ -1,0 +1,159 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-5">
+  <h2 class="text-center">Upload or Capture Nutrition Label</h2>
+
+  <div class="text-center mb-4">
+    <p class="lead">
+      Easily gain insights into your food choices by uploading or capturing an
+      image of the nutrition label.
+    </p>
+    <p class="text-muted">Follow the instructions below:</p>
+    <ul class="list-group mb-4 text-lg-start">
+      <li class="list-group-item">
+        <i class="fas fa-camera"></i>
+        <strong> Take a Photo:</strong> Tap the "Choose file" button below to
+        open your camera. Capture a photo of the label.
+      </li>
+      <li class="list-group-item">
+        <i class="fas fa-file-upload"></i>
+        <strong> Select a File:</strong> If you have a photo already saved,
+        choose it from your device.
+      </li>
+      <li class="list-group-item">
+        <i class="fas fa-eye"></i>
+        <strong> Preview & Upload:</strong> Review your selected image and click
+        "Upload Photo" to analyze the label.
+      </li>
+    </ul>
+  </div>
+
+  <div class="text-center mb-4">
+    <input
+      type="file"
+      id="fileInput"
+      accept="image/*"
+      capture="camera"
+      class="form-control mb-3"
+    />
+    <img
+      id="photo"
+      alt="Captured Photo"
+      class="img-fluid rounded border"
+      style="
+        display: none;
+        max-width: 100%;
+        height: auto;
+        d-flex justify-content-center;
+      "
+    />
+  </div>
+
+  <div class="text-center mb-4">
+    <button id="upload" class="btn btn-success">Upload Photo</button>
+  </div>
+
+  <!-- Analyzing section -->
+  <div id="analyzeSection" class="mt-5 text-center" style="display: none">
+    <div class="spinner-border" role="status" style="display: none">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p id="analyzingText" class="text-center text-muted">Analyzing...</p>
+
+    <!-- Chart Section -->
+    <div
+      id="chartSection"
+      class="row text-center d-flex justify-content-center"
+      style="display: none; justify-content: center"
+    >
+      <div class="col-md-12 d-flex flex-column align-items-center">
+        <img
+          id="chartImage"
+          alt="Chart Image"
+          class="img-fluid rounded border"
+          style="display: none; max-width: 400px"
+        />
+        <div class="mt-5 text-center" id="resultSection" style="display: none">
+          <h5>Overview</h5>
+          <p id="overviewText"></p>
+        </div>
+      </div>
+    </div>
+    <div id="resultButton" style="display: none">
+      <a href="{{ url_for('chatbot') }}" class="btn btn-success mt-3 mb-5"
+        >Continue Conversation with Chatbot</a
+      >
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  const fileInput = document.getElementById("fileInput");
+  const photo = document.getElementById("photo");
+  const analyzeSection = document.getElementById("analyzeSection");
+  const analyzingText = document.getElementById("analyzingText");
+  const chartSection = document.getElementById("chartSection");
+  const chartImage = document.getElementById("chartImage");
+  const spinner = document.querySelector(".spinner-border");
+
+  // Handle file selection
+  fileInput.addEventListener("change", (event) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        photo.src = e.target.result;
+        photo.style.display = "block"; // Show the image
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  document.getElementById("upload").addEventListener("click", () => {
+    // Clear previous analysis results
+    analyzingText.textContent = "Analyzing...";
+    chartSection.style.display = "none";
+    photo.style.display = "none"; // Hide the photo
+
+    // Show spinner and "Analyzing..." section, and scroll to it
+    analyzeSection.style.display = "block";
+    spinner.style.display = "inline-block"; // Show spinner
+    analyzeSection.scrollIntoView({ behavior: "smooth" });
+
+    // Prepare form data for upload
+    const formData = new FormData();
+    if (fileInput.files.length > 0) {
+      formData.append("file", fileInput.files[0]); // Add the file to the FormData object
+    }
+
+    // Simulate an API call to get the chart image and overview text
+    setTimeout(function () {
+      $.ajax({
+        url: "{{ url_for('analyze') }}", // Backend endpoint for file analysis
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+          analyzingText.textContent = "Done!";
+          spinner.style.display = "none"; // Hide spinner
+
+          // Show the chart section and inject the image and overview text
+          chartSection.style.display = "block";
+          chartImage.src = response.chartImageUrl;
+          chartImage.style.display = "block";
+          document.getElementById("overviewText").textContent =
+            response.overviewText;
+          document.getElementById("resultSection").style.display = "block";
+          document.getElementById("resultButton").style.display = "block";
+        },
+        error: function (xhr) {
+          analyzingText.textContent =
+            xhr.responseJSON.error || "An error occurred.";
+          spinner.style.display = "none"; // Hide spinner on error
+        },
+      });
+    }, 10000); // 10 seconds delay
+  });
+</script>
+{% endblock %}
